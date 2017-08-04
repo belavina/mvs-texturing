@@ -13,7 +13,6 @@
 #include <mve/image_tools.h>
 #include <mve/bundle_io.h>
 #include <mve/scene.h>
-
 #include "progress_counter.h"
 #include "texturing.h"
 
@@ -147,7 +146,7 @@ from_images_and_camera_files(std::string const & path, std::vector<TextureView> 
         if (ss.peek() && !ss.eof())
             ss >> cam_info.ppoint[1];
 
-        std::string image_file = util::fs::abspath(util::fs::join_path(path, img_file));
+        std::string image_file = util::fs::abspath(img_file);
         if (cam_info.dist[0] != 0.0f) {
             mve::ByteImage::Ptr image = mve::image::load_file(img_file);
             if (cam_info.dist[1] != 0.0f) {
@@ -161,7 +160,6 @@ from_images_and_camera_files(std::string const & path, std::vector<TextureView> 
             image_file = std::string("/tmp/") + util::fs::basename(img_file);
             mve::image::save_png_file(image, image_file);
         }
-
         #pragma omp critical
         texture_views->push_back(TextureView(i / 2, cam_info, image_file));
 
